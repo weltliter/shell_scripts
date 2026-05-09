@@ -35,10 +35,10 @@ fi
 CPU_LOAD=$(uptime | awk -F'load average: ' '{print $2}' | cut -d, -f1)
 CPU_CORES=$(nproc) # 获取系统 CPU 核心数
 
-# Bash 的 if 不支持小数比较，所以这里用 awk 代理计算。如果 负载 > 核心数，返回 1
-IS_HIGH_LOAD=$(echo "$CPU_LOAD $CPU_CORES" | awk '{if ($1 > $2) print 1; else print 0}')
+# Bash 的 if 不支持小数比较，所以这里用 awk 代理计算
+IS_HIGH_LOAD=$(echo "$CPU_LOAD $CPU_CORES" | awk '{if ($1 > $2) print 0; else print 1}')
 
-if [ "$IS_HIGH_LOAD" -eq 1 ]; then
+if [ "$IS_HIGH_LOAD" -eq 0 ]; then
     ALERT_MSG="${ALERT_MSG}- CPU 1分钟负载达 **${CPU_LOAD}** (已超核心数 ${CPU_CORES}，系统可能卡顿)\n"
 fi
 
